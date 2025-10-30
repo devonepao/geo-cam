@@ -148,32 +148,70 @@ function capturePhoto() {
     // Draw video frame
     context.drawImage(video, 0, 0, canvas.width, canvas.height);
     
+    // Check if landscape mode (width > height)
+    const isLandscape = canvas.width > canvas.height;
+    
     // Add overlay text
     const fontSize = Math.floor(canvas.width / 25);
-    context.font = `600 ${fontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-    context.fillStyle = 'rgba(0, 0, 0, 0.7)';
-    context.fillRect(0, 0, canvas.width, fontSize * 8);
     
-    context.fillStyle = 'white';
-    context.textAlign = 'left';
-    
-    let y = fontSize * 1.5;
-    const padding = fontSize * 0.8;
-    
-    // Header
-    context.font = `700 ${fontSize * 1.2}px -apple-system, BlinkMacSystemFont, sans-serif`;
-    context.fillText('SolvePao Research', padding, y);
-    y += fontSize * 1.8;
-    
-    // Info
-    context.font = `500 ${fontSize * 0.8}px -apple-system, BlinkMacSystemFont, sans-serif`;
-    context.fillText(`Coordinates: ${coordinatesEl.textContent}`, padding, y);
-    y += fontSize * 1.2;
-    context.fillText(`Altitude: ${altitudeEl.textContent}`, padding, y);
-    y += fontSize * 1.2;
-    context.fillText(`Accuracy: ${accuracyEl.textContent}`, padding, y);
-    y += fontSize * 1.2;
-    context.fillText(`Date & Time: ${datetimeEl.textContent}`, padding, y);
+    if (isLandscape) {
+        // Landscape mode - overlay in bottom right
+        const overlayWidth = Math.floor(canvas.width * 0.35); // 35% of width
+        const overlayHeight = fontSize * 8;
+        const overlayX = canvas.width - overlayWidth;
+        const overlayY = canvas.height - overlayHeight;
+        
+        // Semi-transparent background
+        context.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        context.fillRect(overlayX, overlayY, overlayWidth, overlayHeight);
+        
+        context.fillStyle = 'white';
+        context.textAlign = 'right';
+        
+        const padding = fontSize * 0.8;
+        const textX = canvas.width - padding;
+        let y = overlayY + fontSize * 1.5;
+        
+        // Header
+        context.font = `700 ${fontSize * 1.0}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        context.fillText('SolvePao Research', textX, y);
+        y += fontSize * 1.5;
+        
+        // Info
+        context.font = `500 ${fontSize * 0.7}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        context.fillText(`Coordinates: ${coordinatesEl.textContent}`, textX, y);
+        y += fontSize * 1.1;
+        context.fillText(`Altitude: ${altitudeEl.textContent}`, textX, y);
+        y += fontSize * 1.1;
+        context.fillText(`Accuracy: ${accuracyEl.textContent}`, textX, y);
+        y += fontSize * 1.1;
+        context.fillText(`Date & Time: ${datetimeEl.textContent}`, textX, y);
+    } else {
+        // Portrait mode - overlay at top
+        context.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        context.fillRect(0, 0, canvas.width, fontSize * 8);
+        
+        context.fillStyle = 'white';
+        context.textAlign = 'left';
+        
+        let y = fontSize * 1.5;
+        const padding = fontSize * 0.8;
+        
+        // Header
+        context.font = `700 ${fontSize * 1.2}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        context.fillText('SolvePao Research', padding, y);
+        y += fontSize * 1.8;
+        
+        // Info
+        context.font = `500 ${fontSize * 0.8}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        context.fillText(`Coordinates: ${coordinatesEl.textContent}`, padding, y);
+        y += fontSize * 1.2;
+        context.fillText(`Altitude: ${altitudeEl.textContent}`, padding, y);
+        y += fontSize * 1.2;
+        context.fillText(`Accuracy: ${accuracyEl.textContent}`, padding, y);
+        y += fontSize * 1.2;
+        context.fillText(`Date & Time: ${datetimeEl.textContent}`, padding, y);
+    }
     
     // Download image
     canvas.toBlob((blob) => {
