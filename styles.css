@@ -45,6 +45,9 @@ body {
     padding: env(safe-area-inset-top, 20px) 20px 20px 20px;
     background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
     pointer-events: none;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
 }
 
 .header-text {
@@ -190,34 +193,67 @@ button svg {
 /* Landscape mode adjustments */
 @media (orientation: landscape) {
     .overlay {
+        top: auto;
+        bottom: 0;
+        left: auto;
+        right: 0;
+        width: auto;
+        max-width: 380px;
         padding: 16px;
+        background: linear-gradient(to left, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0.3) 70%, transparent 100%);
+        align-items: flex-end;
     }
     
     .header-text {
-        font-size: 18px;
-        margin-bottom: 12px;
+        font-size: 16px;
+        margin-bottom: 10px;
+        text-align: right;
     }
     
     .info-container {
-        padding: 12px;
+        padding: 10px 12px;
         border-radius: 12px;
+        max-width: 100%;
     }
     
     .info-row {
-        padding: 6px 0;
+        padding: 5px 0;
     }
     
     .label, .value {
-        font-size: 12px;
+        font-size: 11px;
     }
     
     .controls {
         padding: 12px;
+        flex-direction: column;
+        width: auto;
+        position: fixed;
+        left: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        border-top: none;
+        border-right: 1px solid rgba(0, 0, 0, 0.1);
+        background: rgba(255, 255, 255, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-radius: 0 12px 12px 0;
     }
     
     button {
-        padding: 12px 16px;
-        font-size: 14px;
+        padding: 12px;
+        font-size: 0;
+        min-width: 48px;
+        min-height: 48px;
+    }
+    
+    button span {
+        display: none;
+    }
+    
+    button svg {
+        width: 24px;
+        height: 24px;
     }
 }
 
