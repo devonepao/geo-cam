@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="light-content">
+    <title>SolvePao Research - Geo Camera</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Camera View -->
+        <div class="camera-container">
+            <video id="camera" autoplay playsinline></video>
+            <canvas id="canvas" style="display: none;"></canvas>
+            
+            <!-- Overlay Info -->
+            <div class="overlay">
+                <div class="header-text">SolvePao Research</div>
+                <div class="info-container">
+                    <div class="info-row">
+                        <span class="label">Coordinates</span>
+                        <span class="value" id="coordinates">Loading...</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Altitude</span>
+                        <span class="value" id="altitude">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Accuracy</span>
+                        <span class="value" id="accuracy">--</span>
+                    </div>
+                    <div class="info-row">
+                        <span class="label">Date & Time</span>
+                        <span class="value" id="datetime">--</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Controls -->
+        <div class="controls">
+            <button id="toggleCamera" class="btn-primary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+                    <polyline points="9 22 9 12 15 12 15 22"></polyline>
+                </svg>
+                <span>Toggle Camera</span>
+            </button>
+            <button id="captureBtn" class="btn-secondary">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10"></circle>
+                    <circle cx="12" cy="12" r="3"></circle>
+                </svg>
+                <span>Capture</span>
+            </button>
+        </div>
+
+        <!-- Permission Message -->
+        <div id="permissionMessage" class="permission-message" style="display: none;">
+            <div class="message-content">
+                <h3>Camera & Location Access Required</h3>
+                <p>Please allow access to camera and location services to use this application.</p>
+                <button id="retryBtn" class="btn-primary">Retry</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
