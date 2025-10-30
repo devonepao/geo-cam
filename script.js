@@ -152,42 +152,95 @@ function capturePhoto() {
     const isLandscape = canvas.width > canvas.height;
     
     // Add overlay text
-    const fontSize = Math.floor(canvas.width / 25);
+    const baseFontSize = Math.floor(canvas.width / 30);
     
     if (isLandscape) {
-        // Landscape mode - overlay in bottom right
-        const overlayWidth = Math.floor(canvas.width * 0.35); // 35% of width
-        const overlayHeight = fontSize * 8;
-        const overlayX = canvas.width - overlayWidth;
-        const overlayY = canvas.height - overlayHeight;
+        // Landscape mode - overlay in bottom right (matching preview exactly)
+        const overlayWidth = Math.floor(canvas.width * 0.30); // 30% of width
+        const padding = baseFontSize * 1.2;
+        const itemSpacing = baseFontSize * 2.5;
         
-        // Semi-transparent background
-        context.fillStyle = 'rgba(0, 0, 0, 0.7)';
+        // Calculate overlay dimensions based on content
+        const headerFontSize = baseFontSize * 1.4;
+        const labelFontSize = baseFontSize * 0.9;
+        const valueFontSize = baseFontSize * 0.9;
+        
+        const overlayHeight = padding * 2 + headerFontSize + itemSpacing * 4;
+        const overlayX = canvas.width - overlayWidth - padding;
+        const overlayY = canvas.height - overlayHeight - padding;
+        
+        // Draw semi-transparent background with border (glassmorphism effect)
+        context.fillStyle = 'rgba(255, 255, 255, 0.15)';
         context.fillRect(overlayX, overlayY, overlayWidth, overlayHeight);
         
+        // Draw border
+        context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        context.lineWidth = 1;
+        context.strokeRect(overlayX, overlayY, overlayWidth, overlayHeight);
+        
+        // Draw gradient background
+        const gradient = context.createLinearGradient(canvas.width - overlayWidth - padding * 2, overlayY, canvas.width, overlayY);
+        gradient.addColorStop(0, 'rgba(0, 0, 0, 0)');
+        gradient.addColorStop(0.3, 'rgba(0, 0, 0, 0.3)');
+        gradient.addColorStop(1, 'rgba(0, 0, 0, 0.6)');
+        context.fillStyle = gradient;
+        context.fillRect(canvas.width - overlayWidth - padding * 3, overlayY - padding, overlayWidth + padding * 3, overlayHeight + padding * 2);
+        
+        // Re-draw the main container on top
+        context.fillStyle = 'rgba(255, 255, 255, 0.15)';
+        context.fillRect(overlayX, overlayY, overlayWidth, overlayHeight);
+        context.strokeStyle = 'rgba(255, 255, 255, 0.2)';
+        context.lineWidth = 1;
+        context.strokeRect(overlayX, overlayY, overlayWidth, overlayHeight);
+        
+        let currentY = overlayY + padding * 1.2;
+        
+        // Header - centered
         context.fillStyle = 'white';
-        context.textAlign = 'right';
+        context.textAlign = 'center';
+        context.font = `600 ${headerFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        context.fillText('SolvePao Research', overlayX + overlayWidth / 2, currentY + headerFontSize * 0.8);
+        currentY += headerFontSize + padding * 1.3;
         
-        const padding = fontSize * 0.8;
-        const textX = canvas.width - padding;
-        let y = overlayY + fontSize * 1.5;
+        // Draw info rows with label-value pairs
+        context.font = `500 ${labelFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+        const rowPadding = padding * 0.8;
+        const labelX = overlayX + rowPadding;
+        const valueX = overlayX + overlayWidth - rowPadding;
         
-        // Header
-        context.font = `700 ${fontSize * 1.0}px -apple-system, BlinkMacSystemFont, sans-serif`;
-        context.fillText('SolvePao Research', textX, y);
-        y += fontSize * 1.5;
+        // Function to draw info row with separator line
+        function drawInfoRow(label, value, yPos) {
+            // Draw separator line
+            context.strokeStyle = 'rgba(255, 255, 255, 0.1)';
+            context.lineWidth = 1;
+            context.beginPath();
+            context.moveTo(overlayX + rowPadding, yPos);
+            context.lineTo(overlayX + overlayWidth - rowPadding, yPos);
+            context.stroke();
+            
+            // Draw label (left aligned)
+            context.fillStyle = 'rgba(255, 255, 255, 0.8)';
+            context.textAlign = 'left';
+            context.font = `500 ${labelFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            context.fillText(label, labelX, yPos + labelFontSize * 1.4);
+            
+            // Draw value (right aligned)
+            context.fillStyle = 'white';
+            context.textAlign = 'right';
+            context.font = `600 ${valueFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
+            context.fillText(value, valueX, yPos + valueFontSize * 1.4);
+            
+            return yPos + itemSpacing;
+        }
         
-        // Info
-        context.font = `500 ${fontSize * 0.7}px -apple-system, BlinkMacSystemFont, sans-serif`;
-        context.fillText(`Coordinates: ${coordinatesEl.textContent}`, textX, y);
-        y += fontSize * 1.1;
-        context.fillText(`Altitude: ${altitudeEl.textContent}`, textX, y);
-        y += fontSize * 1.1;
-        context.fillText(`Accuracy: ${accuracyEl.textContent}`, textX, y);
-        y += fontSize * 1.1;
-        context.fillText(`Date & Time: ${datetimeEl.textContent}`, textX, y);
+        currentY = drawInfoRow('Coordinates', coordinatesEl.textContent, currentY);
+        currentY = drawInfoRow('Altitude', altitudeEl.textContent, currentY);
+        currentY = drawInfoRow('Accuracy', accuracyEl.textContent, currentY);
+        drawInfoRow('Date & Time', datetimeEl.textContent, currentY);
+        
     } else {
         // Portrait mode - overlay at top
+        const fontSize = Math.floor(canvas.width / 25);
         context.fillStyle = 'rgba(0, 0, 0, 0.7)';
         context.fillRect(0, 0, canvas.width, fontSize * 8);
         
