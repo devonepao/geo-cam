@@ -199,7 +199,7 @@ function capturePhoto() {
         context.fillStyle = 'white';
         context.textAlign = 'center';
         context.font = `600 ${headerFontSize}px -apple-system, BlinkMacSystemFont, sans-serif`;
-        context.fillText('SolvePao Research', overlayX + overlayWidth / 2, currentY + headerFontSize * 0.8);
+        context.fillText('GPS Cam by solvepao research', overlayX + overlayWidth / 2, currentY + headerFontSize * 0.8);
         currentY += headerFontSize + padding * 1.3;
         
         // Draw info rows with label-value pairs
@@ -252,7 +252,7 @@ function capturePhoto() {
         
         // Header
         context.font = `700 ${fontSize * 1.2}px -apple-system, BlinkMacSystemFont, sans-serif`;
-        context.fillText('SolvePao Research', padding, y);
+        context.fillText('GPS Cam by solvepao research', padding, y);
         y += fontSize * 1.8;
         
         // Info
